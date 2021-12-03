@@ -1,0 +1,7 @@
+.idea
+__pycache__
+
+TODO.txt
+old_compiler.py
+tokenizer.py
+interpretator.py
