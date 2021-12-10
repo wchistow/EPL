@@ -1,9 +1,7 @@
 import re
 
-from pygments import highlight
 from pygments.lexer import RegexLexer, words
 from pygments.token import *
-from pygments.formatters import GifImageFormatter
 
 from compiler import keywords, checks, built_in_funcs
 
