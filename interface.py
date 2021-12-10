@@ -75,10 +75,8 @@ class Interface:
         tk_exit.title("Выход")
         label = tkinter.Label(tk_exit, text='Вы действительно хотите выйти?')
         label.pack()
-        ok_button = tkinter.Button(tk_exit, text='Да', command=lambda: self.quit(tk_exit,
-                                   self.tk), activebackground='red')
-        undo_button = tkinter.Button(tk_exit, text='Нет', command=tk_exit.destroy,
-                                     activebackground='cyan')
+        ok_button = tkinter.Button(tk_exit, text='Да', command=lambda: self.quit(tk_exit, self.tk))
+        undo_button = tkinter.Button(tk_exit, text='Нет', command=tk_exit.destroy)
         ok_button.pack(side=tkinter.LEFT)
         undo_button.pack(side=tkinter.RIGHT)
 
@@ -92,7 +90,9 @@ class Interface:
         show_doc = tkinter.Text(tk)
         with open('документация.txt') as f:
             show_doc.insert('1.0', f.read())
-        show_doc.pack()
+        show_doc.grid(row=0, column=0)
+        exit_btn = tkinter.Button(tk, text='закрыть', command=tk.destroy)
+        exit_btn.grid(row=1, column=0)
 
     def highlight_syntax(self):
         for tag in ("Token.Keyword", "Token.Text", "Token.Literal.String",
