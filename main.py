@@ -1,3 +1,3 @@
-import interface
+from interface import Interface
 
-interface.create_interface()
+interface = Interface()
