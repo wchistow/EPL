@@ -55,18 +55,18 @@ class Interface:
     def reset(self, evt):
         self.t.reset()
         self.t.up()
-        reset_texts(canvas)
+        reset_texts(self.canvas)
         self.codeinput.delete('1.0', 'end')
 
     def open_file(self, evt):
         try:
-            open_f(codeinput)
+            open_f(self.codeinput)
         except (IOError, UnicodeDecodeError):
             pass
 
     def save_file(self, evt):
         try:
-            save(codeinput.get('1.0', 'end'))
+            save(self.codeinput.get('1.0', 'end'))
         except (IOError, UnicodeDecodeError):
             pass
 
