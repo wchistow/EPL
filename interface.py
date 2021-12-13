@@ -186,6 +186,7 @@ class Interface:
             self.t.reset()
             self.t.up()
             reset_texts(self.canvas)
+
             try:
                 exec(self.code, globals(), locals())
             except BoundsError:
