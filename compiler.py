@@ -61,23 +61,23 @@ def tokenize(text):
 
 # Словарь команд.
 built_in_funcs = {
-    'ВВЕРХ': ['t.setheading(90)', 't.forward(50)', 'check_hit_edge(t)'],
-    'ВНИЗ': ['t.setheading(-90)', 't.forward(50)', 'check_hit_edge(t)'],
-    'ВПРАВО': ['t.setheading(0)', 't.forward(50)', 'check_hit_edge(t)'],
-    'ВЛЕВО': ['t.setheading(180)', 't.forward(50)', 'check_hit_edge(t)'],
-    'ПОДНЯТЬ': ['t.up()'],
-    'ОПУСТИТЬ': ['t.down()'],
-    'СБРОС': ['t.reset()'],
-    'ОЧИСТИТЬ': ['t.clear()'],
-    'ДОМОЙ': ['t.home()'],
+    'ВВЕРХ': ['self.t.setheading(90)', 'self.t.forward(50)', 'check_hit_edge(self.t)'],
+    'ВНИЗ': ['self.t.setheading(-90)', 'self.t.forward(50)', 'check_hit_edge(self.t)'],
+    'ВПРАВО': ['self.t.setheading(0)', 'self.t.forward(50)', 'check_hit_edge(self.t)'],
+    'ВЛЕВО': ['self.t.setheading(180)', 'self.t.forward(50)', 'check_hit_edge(self.t)'],
+    'ПОДНЯТЬ': ['self.t.up()'],
+    'ОПУСТИТЬ': ['self.t.down()'],
+    'СБРОС': ['self.t.reset()'],
+    'ОЧИСТИТЬ': ['self.t.clear()'],
+    'ДОМОЙ': ['self.t.home()'],
     'СТЕРЕТЬ': ['del_text(t, canvas)']
 }
 
 checks = {
-    'КРАЙ': 'check_edge(t)',
-    'СИМВОЛ': 'is_symbol(t, "any")',
-    'ПУСТО': 'not_symbol(t)',
-    'СВОБОДНО': 'empty(t)',
+    'КРАЙ': 'check_edge(self.t)',
+    'СИМВОЛ': 'is_symbol(self.t, "any")',
+    'ПУСТО': 'not_symbol(self.t)',
+    'СВОБОДНО': 'empty(self.t)',
     'НЕ': 'not',
     'И': 'and',
     'ИЛИ': 'or'
@@ -125,7 +125,7 @@ class Compiler:
             'ПОВТОРИ': ('loop', 'for i in range('),
             'ЕСЛИ': ('if', ''),
             'ПОКА': ('while', ''),
-            'ПИШИ': ('write', 'write(t, '),
+            'ПИШИ': ('write', 'write(self.t, '),
         }
         self.names = {
             'func': 'функция',
@@ -222,13 +222,13 @@ class Compiler:
         elif token.isdigit() or token.isalpha():
             if token in keywords:
                 raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
-            self.stack[-1].code += f'is_symbol(t, "{token}") '
+            self.stack[-1].code += f'is_symbol(self.t, "{token}") '
 
     def prepare_write_word(self, token):
         if token in keywords:
             raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
         self.stack[-1].status = 1
-        self.stack[-1].code += f'"{token}", canvas)'
+        self.stack[-1].code += f'"{token}", self.canvas)'
         self.pycode.append(self.stack[-1].code)
 
 
