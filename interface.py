@@ -187,7 +187,7 @@ class Interface:
             self.t.up()
             reset_texts(self.canvas)
             try:
-                exec(self.code, globals())
+                exec(self.code, globals(), locals())
             except BoundsError:
                 self.error('Не могу!')
             except SyntaxError:
