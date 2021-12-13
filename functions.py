@@ -62,6 +62,8 @@ def write(t, text, canvas):
     y = round(t.ycor())
     if (x, y) in texts:
         canvas.delete(texts[x, y][0])
+    if len(text) >= 12:
+        text = text[:9] + '...'
     s = canvas.create_text(x, -y, text=text)
     texts[x, y] = (s, text)
 
