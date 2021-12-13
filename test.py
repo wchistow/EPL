@@ -4,6 +4,7 @@ from compiler import Compiler, EPLSyntaxError, EPLNameError, EPLValueError
 
 
 class TestCompiler(unittest.TestCase):
+
     def setUp(self):
         self.comp = Compiler()
 

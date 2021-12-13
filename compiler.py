@@ -73,6 +73,7 @@ built_in_funcs = {
     'СТЕРЕТЬ': ['del_text(self.t, self.canvas)']
 }
 
+
 checks = {
     'КРАЙ': 'check_edge(self.t)',
     'СИМВОЛ': 'is_symbol(self.t, "any")',
@@ -82,6 +83,7 @@ checks = {
     'И': 'and',
     'ИЛИ': 'or'
 }
+
 
 keywords = [
     'ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'ТО', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
