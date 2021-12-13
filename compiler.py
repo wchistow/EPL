@@ -70,7 +70,7 @@ built_in_funcs = {
     'СБРОС': ['self.t.reset()'],
     'ОЧИСТИТЬ': ['self.t.clear()'],
     'ДОМОЙ': ['self.t.home()'],
-    'СТЕРЕТЬ': ['del_text(t, canvas)']
+    'СТЕРЕТЬ': ['del_text(self.t, self.canvas)']
 }
 
 checks = {

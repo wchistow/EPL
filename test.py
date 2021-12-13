@@ -26,13 +26,13 @@ class TestCompiler(unittest.TestCase):
     def test_reset_clear_home_del(self):
         """Тестирует сброс, очистить, домой, стереть."""
         code = 'сброс очистить домой стереть'
-        good_ans = 'self.t.reset()\nself.t.clear()\nself.t.home()\ndel_text(self.t, canvas)'
+        good_ans = 'self.t.reset()\nself.t.clear()\nself.t.home()\ndel_text(self.t, self.canvas)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_write(self):
         """Тестирует 'пиши а' и комментарий."""
         code = 'пиши а'
-        good_ans = 'write(self.t, "А", canvas)'
+        good_ans = 'write(self.t, "А", self.canvas)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_comment(self):
