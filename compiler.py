@@ -193,9 +193,9 @@ class Compiler:
         elif not token.isidentifier():
             raise EPLNameError(f'Не верное имя функции "{token}".')
         self.stack[-1].status = 1
-        self.stack[-1].code += f'{token}():'
+        self.stack[-1].code += f'{token}(self):'
         self.pycode.append(self.stack[-1].code)
-        self.user_funcs[token] = token + '()'
+        self.user_funcs[token] = token + '(self)'
         self.indent += '    '
 
     def prepare_loop_num(self, token):
