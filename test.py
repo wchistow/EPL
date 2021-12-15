@@ -42,9 +42,9 @@ class TestCompiler(unittest.TestCase):
     def test_define_func(self):
         """Тестирует определение функции."""
         code = 'это имя вверх конец имя'
-        good_ans = 'def ИМЯ():\n'
+        good_ans = 'def ИМЯ(self):\n'
         good_ans += '    self.t.setheading(90)\n    self.t.forward(50)\n    check_hit_edge(self.t)\n'
-        good_ans += 'ИМЯ()'
+        good_ans += 'ИМЯ(self)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_loop(self):
@@ -126,7 +126,7 @@ class TestCompiler(unittest.TestCase):
 
     def test_nested(self):
         code = 'это имя если край то вниз конец конец'
-        good_ans = 'def ИМЯ():\n    if check_edge(self.t) :\n'
+        good_ans = 'def ИМЯ(self):\n    if check_edge(self.t) :\n'
         good_ans += '        self.t.setheading(-90)\n        self.t.forward(50)\n        check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
