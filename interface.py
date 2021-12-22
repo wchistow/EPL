@@ -27,10 +27,7 @@ class Interface:
             self.highlight_syntax))
         # Кнопка запуска.
         self.go_btn = tkinter.Button(self.tk, text='запустить', command=self.go)
-        self.go_btn.grid(row=2, column=1)
-        # Кнопка проверки.
-        self.comp = tkinter.Button(self.tk, text='проверить', command=self.compilation)
-        self.comp.grid(row=2, column=2)
+        self.go_btn.grid(row=2, column=0)
 
         # Поле для рисования.
         self.canvas = tkinter.Canvas(self.tk, width=WIDTH, height=HEIGHT)
@@ -156,37 +153,27 @@ class Interface:
         canvas.create_text(30 + len(text) * 5, 50, text=msg,
                            fill='red', font=('Helvetika', -15))
 
-    def good_compilation(self, t):
-        """Выводит сообщение об успешной компиляции."""
-        tkg = tkinter.Tk()
-        tkg.title('Успешная проверка')
-        canvas = tkinter.Canvas(tkg, width=400, height=100)
-        canvas.grid(row=0, column=0)
-        ok = tkinter.Button(tkg, text='OK', command=tkg.destroy)
-        ok.grid(row=1, column=0)
-        canvas.create_text(200, 50, text=f'Проверка прошла успешно!\nВремя - {t}мкс',
-                           fill='green', font=('Helvetika', -20))
-
     def compilation(self):
         """Запускает компиляцию."""
         t1 = time()
         text = self.codeinput.get('1.0', 'end')
         try:
             self.code = compiler.compilation(self.preprocess(repr(text)))
-            self.is_compile = True
         except (compiler.EPLSyntaxError, compiler.EPLNameError, compiler.EPLValueError) as e:
             self.error(e.args[0])
+            self.is_compile = False
         else:
-            t = int((time() - t1) * 1000000)
-            self.good_compilation(t)
+            self.is_compile = True
 
     def go(self):
         """Запускает скомпилированную программу."""
-        if self.is_compile:
-            self.t.reset()
-            self.t.up()
-            reset_texts(self.canvas)
+        self.compilation()
 
+        self.t.reset()
+        self.t.up()
+        reset_texts(self.canvas)
+
+        if self.is_compile:
             try:
                 exec(self.code, globals(), locals())
             except BoundsError:
