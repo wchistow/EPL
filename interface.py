@@ -85,7 +85,7 @@ class Interface:
         tk = tkinter.Tk()
         tk.title("документация")
         show_doc = tkinter.Text(tk)
-        with open('документация.md') as f:
+        with open('документация.txt') as f:
             show_doc.insert('1.0', f.read())
         show_doc.grid(row=0, column=0)
         exit_btn = tkinter.Button(tk, text='закрыть', command=tk.destroy)
