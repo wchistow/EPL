@@ -13,7 +13,7 @@ from lexer import EPLLexer
 class Interface:
     def __init__(self):
         self.tk = tkinter.Tk()
-        self.tk.title("EPL 1.0")
+        self.tk.title("EPL 1.1")
         # Окно ввода кода.
         self.lexer = EPLLexer()
         self.codeinput = tkinter.Text(self.tk, tabs=2)

@@ -1,4 +1,4 @@
-"""Компилятор языка EPL версии 1.0."""
+"""Компилятор языка EPL версии 1.1."""
 
 from dataclasses import dataclass
 from enum import Enum, auto

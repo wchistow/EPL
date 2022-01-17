@@ -1,7 +1,7 @@
 # EPL
 # Elementary programming languge
 # Простой язык программирования
-# версия - 1.0
+# версия - 1.1
 
 This programming language only for people, who can speak Russian
 
