@@ -112,11 +112,11 @@ class Compiler:
         self.stack = [StackCell('main', 1, '')]
         self.user_funcs = {}
         self.handlers = {
-            'func': self.prepare_func_name,
-            'loop': self.prepare_loop_num,
-            'while': self.prepare_if_while_check,
-            'if': self.prepare_if_while_check,
-            'write': self.prepare_write_word
+            'func': self.handle_func_name,
+            'loop': self.handle_loop_num,
+            'while': self.handle_if_while_check,
+            'if': self.handle_if_while_check,
+            'write': self.handle_write_word
         }
 
         self.keywords_cells = {
@@ -184,7 +184,7 @@ class Compiler:
 
         return '\n'.join(self.pycode)
 
-    def prepare_func_name(self, token: str):
+    def handle_func_name(self, token: str):
         if token in built_in_funcs or token in keywords:
             raise EPLNameError(f'Ошибка имени: имя "{token}" уже используется.')
         elif not token.isidentifier():
@@ -195,7 +195,7 @@ class Compiler:
         self.user_funcs[token] = token + '(self)'
         self.indent += '    '
 
-    def prepare_loop_num(self, token):
+    def handle_loop_num(self, token):
         if not token.isdigit():
             raise EPLValueError('Цикл должен принимать целое не отрицательное число')
         self.stack[-1].status = 1
@@ -203,7 +203,7 @@ class Compiler:
         self.pycode.append(self.stack[-1].code)
         self.indent += '    '
 
-    def prepare_if_while_check(self, token):
+    def handle_if_while_check(self, token):
         if token in checks:
             self.stack[-1].code += f'{checks[token]} '
         elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or (self.stack[-1].name == 'if' and token == 'ТО'):
@@ -223,7 +223,7 @@ class Compiler:
                 raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
             self.stack[-1].code += f'is_symbol(self.t, "{token}") '
 
-    def prepare_write_word(self, token):
+    def handle_write_word(self, token):
         if token in keywords:
             raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
         self.stack[-1].status = 1
