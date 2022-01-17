@@ -83,7 +83,7 @@ checks = {
     'ИЛИ': 'or'
 }
 
-keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ТО', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
+keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ТО', 'ДЕЛАЙ', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
 
 
 @dataclass
@@ -206,7 +206,7 @@ class Compiler:
     def prepare_if_while_check(self, token):
         if token in checks:
             self.stack[-1].code += f'{checks[token]} '
-        elif token == 'ТО':
+        elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or (self.stack[-1].name == 'if' and token == 'ТО'):
             try:
                 compile(self.stack[-1].code, 'f', 'eval')
             except SyntaxError:

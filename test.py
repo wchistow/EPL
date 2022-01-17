@@ -119,7 +119,7 @@ class TestCompiler(unittest.TestCase):
 
     def test_while(self):
         """Тестирует цикл пока."""
-        code = 'пока не край то вверх конец'
+        code = 'пока не край делай вверх конец'
         good_ans = 'while not check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
