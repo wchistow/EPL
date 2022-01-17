@@ -110,17 +110,17 @@ class Interface:
                               command=lambda: self.codeinput.insert('1.0', ''),
                               accelerator=self.modifier + '+N')
         if platform == 'darwin':
-            master.createcommand('Сохранить', lambda: save(self.codeinput.get('1.0', 'end')))
-            master.createcommand('Открыть', lambda: open_f(self.codeinput))
+            master.createcommand('Сохранить', lambda: self.save_file(self.codeinput.get('1.0', 'end')))
+            master.createcommand('Открыть', lambda: self.open_file(self.codeinput))
             master.createcommand('Выход', self.ask_exit)
         else:
             file_menu.add_separator()
             file_menu.add_command(label='Сохранить', underline=0,
-                                  command=lambda: save(self.codeinput.get('1.0', 'end')),
+                                  command=lambda: self.save_file(self.codeinput.get('1.0', 'end')),
                                   compound=tkinter.LEFT, accelerator=self.modifier + '+S')
             file_menu.add_separator()
             file_menu.add_command(label='Открыть', underline=0,
-                                  command=lambda: open_f(self.codeinput),
+                                  command=lambda: self.open_file(self.codeinput),
                                   compound=tkinter.LEFT, accelerator=self.modifier + '+O')
             file_menu.add_separator()
             file_menu.add_command(label='Выход', underline=0,
