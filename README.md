@@ -1,5 +1,5 @@
 # EPL
-# Elementary programming languge
+# Elementary programming language
 # Простой язык программирования
 # версия - 1.1
 
