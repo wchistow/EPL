@@ -1,9 +1,8 @@
 """Графика."""
 
 import tkinter
-from sys import platform
-from time import time
 from turtle import TurtleScreen, RawTurtle
+from sys import platform
 
 import compiler
 from functions import *
@@ -24,7 +23,7 @@ class Interface:
         self.codeinput.tag_configure("Token.Comment", foreground="grey")
         self.codeinput.tag_configure("Token.Name.Builtin", foreground="green")
         self.codeinput.bind('<Key>', lambda event: self.tk.after(20,
-            self.highlight_syntax))
+                            self.highlight_syntax))
         # Кнопка запуска.
         self.go_btn = tkinter.Button(self.tk, text='запустить', command=self.go)
         self.go_btn.grid(row=2, column=0)
@@ -155,12 +154,11 @@ class Interface:
 
     def compilation(self):
         """Запускает компиляцию."""
-        t1 = time()
         text = self.codeinput.get('1.0', 'end')
         try:
             self.code = compiler.compilation(self.preprocess(repr(text)))
-        except (compiler.EPLSyntaxError, compiler.EPLNameError, compiler.EPLValueError) as e:
-            self.error(e.args[0])
+        except (compiler.EPLException) as e:
+            self.error(e.args[0], line_num=e.args[1])
             self.is_compile = False
         else:
             self.is_compile = True
