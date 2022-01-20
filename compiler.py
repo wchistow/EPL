@@ -41,6 +41,7 @@ def tokenize(text):
             if not x.isalpha():
                 yield current_token
                 state = start_state(x)
+                current_token = ''
                 if state == TokenType.OPERATOR:
                     yield x
                     state = TokenType.WAIT
