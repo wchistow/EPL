@@ -57,6 +57,7 @@ class Interface:
     def open_file(self, evt):
         try:
             open_f(self.codeinput)
+            self.highlight_syntax()
         except (IOError, UnicodeDecodeError):
             pass
 
