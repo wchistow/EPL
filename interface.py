@@ -71,14 +71,14 @@ class Interface:
         tk_exit.title("Выход")
         label = tkinter.Label(tk_exit, text='Вы действительно хотите выйти?')
         label.pack()
-        ok_button = tkinter.Button(tk_exit, text='Да', command=lambda: self.quit(tk_exit, self.tk))
+        ok_button = tkinter.Button(tk_exit, text='Да', command=lambda: self.quit([tk_exit, self.tk]))
         undo_button = tkinter.Button(tk_exit, text='Нет', command=tk_exit.destroy)
         ok_button.pack(side=tkinter.LEFT)
         undo_button.pack(side=tkinter.RIGHT)
 
-    def quit(self, tk1, tk2):
-        tk1.destroy()
-        tk2.destroy()
+    def quit(self, tks: list[tkinter.Tk]):
+        for tk in tks:
+            tk.destroy()
 
     def open_doc(self, evt=None):
         tk = tkinter.Tk()
