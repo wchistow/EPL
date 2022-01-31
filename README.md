@@ -11,22 +11,9 @@ This programming language only for people, who can speak Russian
 ----
 
 ## Установка
-Установить EPL можно так:
-### в Linux и Mac OS X:
-```
-cd <Путь к катологу, в который вы хотите скачать EPL>
-git clone https://github.com/wchistow/EPL.git
-```
-### в Windows:
-```
-dir <Путь к катологу, в который вы хотите скачать EPL>
-git clone https://github.com/wchistow/EPL.git
-```
+Для работы EPL-а необходим Python и библиотека Pygments
 
-## Запуск
-Для запуска EPL-а необходим Python
-
-Введите:
+#### Для установки Python-а введите:
 ```
 python3 --version
 ```
@@ -35,6 +22,23 @@ python3 --version
 Если же нет, то вы можете установить Python с
 [официального сайта](https://www.python.org/)
 
+#### Для установки Pygments-а введите:
+```
+pip install pygments
+```
+### Установить EPL можно так:
+#### в Linux и Mac OS X:
+```
+cd <Путь к катологу, в который вы хотите скачать EPL>
+git clone https://github.com/wchistow/EPL.git
+```
+#### в Windows:
+```
+dir <Путь к катологу, в который вы хотите скачать EPL>
+git clone https://github.com/wchistow/EPL.git
+```
+
+## Запуск
 Запустить EPL во всех операционных системах можно так:
 ```
 python3 <Путь к катологу, в который вы скачали EPL>/main.py
