@@ -71,7 +71,7 @@ built_in_funcs = {
     'СБРОС': ['self.t.reset()'],
     'ОЧИСТИТЬ': ['self.t.clear()'],
     'ДОМОЙ': ['self.t.home()'],
-    'СТЕРЕТЬ': ['del_text(self.t, self.canvas)']
+    'СТЕРЕТЬ': ['del_text(self.t, self.canvas)'],
 }
 
 checks = {
@@ -81,7 +81,7 @@ checks = {
     'СВОБОДНО': 'empty(self.t)',
     'НЕ': 'not',
     'И': 'and',
-    'ИЛИ': 'or'
+    'ИЛИ': 'or',
 }
 
 keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ТО', 'ДЕЛАЙ', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
@@ -94,16 +94,20 @@ class StackCell:
     code: str
 
 
-class EPLException(Exception): pass
+class EPLException(Exception):
+    pass
 
 
-class EPLSyntaxError(EPLException): pass
+class EPLSyntaxError(EPLException):
+    pass
 
 
-class EPLNameError(EPLException): pass
+class EPLNameError(EPLException):
+    pass
 
 
-class EPLValueError(EPLException): pass
+class EPLValueError(EPLException):
+    pass
 
 
 class Compiler:
@@ -117,7 +121,8 @@ class Compiler:
             'loop': self.handle_loop_num,
             'while': self.handle_if_while_check,
             'if': self.handle_if_while_check,
-            'write': self.handle_write_word
+            'write': self.handle_write_word,
+            'else': self.handle_else,
         }
 
         self.keywords_cells = {
@@ -126,12 +131,14 @@ class Compiler:
             'ЕСЛИ': ('if', ''),
             'ПОКА': ('while', ''),
             'ПИШИ': ('write', 'write(self.t, '),
+            'ИНАЧЕ': ('else', ''),
         }
         self.names = {
             'func': 'функция',
             'loop': 'цикл',
             'if': 'проверка',
             'while': 'цикл',
+            'else': 'иначе',
         }
 
     def translate(self, code: str):
@@ -149,20 +156,17 @@ class Compiler:
 
                     elif t in self.keywords_cells:
                         cell = self.keywords_cells[t]
-                        if t == 'ЕСЛИ' or t == 'ПОКА':
+                        if t in ('ЕСЛИ', 'ПОКА', 'ИНАЧЕ'):
                             self.stack.append(StackCell(cell[0], 0, cell[1]))
                         else:
                             self.stack.append(StackCell(cell[0], 0, self.indent + cell[1]))
 
                     elif t in built_in_funcs:
                         for string in built_in_funcs[t]:
-                            self.pycode.append(f'{self.indent}{string}')
+                            self.pycode.append(self.indent + string)
 
                     elif t in self.user_funcs:
                         self.pycode.append(self.indent + self.user_funcs[t])
-
-                    elif t == 'ИНАЧЕ':
-                        self.pycode.append(f'{self.indent[:-4]}else:')
 
                     elif t == 'КОНЕЦ':
                         if self.stack[-1].name == 'main':
@@ -207,7 +211,8 @@ class Compiler:
     def handle_if_while_check(self, token):
         if token in checks:
             self.stack[-1].code += f'{checks[token]} '
-        elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or (self.stack[-1].name == 'if' and token == 'ТО'):
+        elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or \
+                (self.stack[-1].name == 'if' and token == 'ТО'):
             try:
                 compile(self.stack[-1].code, 'f', 'eval')
             except SyntaxError:
@@ -224,12 +229,28 @@ class Compiler:
                 raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
             self.stack[-1].code += f'is_symbol(self.t, "{token}") '
 
+    def handle_else(self, token):
+        if token in built_in_funcs or \
+                token in ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'ПОКА', 'ПИШИ'] or \
+                token in self.user_funcs:
+            self.stack[-1].status = 1
+            self.pycode.append(f'{self.indent[:-4]}else:')
+            # Handle current token
+            if token in built_in_funcs:
+                for line in built_in_funcs[token]:
+                    self.pycode.append(self.indent + line)
+            elif token in ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'ПОКА', 'ПИШИ']:
+                self.handlers[self.stack[-1].name](token)
+            else:
+                self.pycode.append(self.indent + self.user_funcs[token])
+
     def handle_write_word(self, token):
         if token in keywords:
             raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
         self.stack[-1].status = 1
         self.stack[-1].code += f'"{token}", self.canvas)'
         self.pycode.append(self.stack[-1].code)
+        self.stack.pop()
 
 
 def get_lines(code: str):
