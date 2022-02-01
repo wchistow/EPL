@@ -39,9 +39,14 @@ git clone https://github.com/wchistow/EPL.git
 ```
 
 ## Запуск
-Запустить EPL во всех операционных системах можно так:
+Запустить EPL можно так:
+#### в Linux и Mac OS X:
 ```
 python3 <Путь к катологу, в который вы скачали EPL>/EPL/main.py
+```
+#### в Windows:
+```
+python3 <Путь к катологу, в который вы скачали EPL>\EPL\main.py
 ```
 ## Справка
 документацию к EPL-у можно найти [здесь](https://github.com/wchistow/EPL/blob/master/документация.md)
