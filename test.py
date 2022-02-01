@@ -99,6 +99,14 @@ class TestCompiler(unittest.TestCase):
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
+    def test_if_elif(self):
+        code = 'если край то вниз иначе если свободно то вниз конец'
+        good_ans = 'if check_edge(self.t) :\n'
+        good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)\n'
+        good_ans += 'elif empty(self.t) :\n'
+        good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
+        self.assertEqual(self.comp.translate(code), good_ans)
+
     def test_is_letter(self):
         code = 'если а то вверх конец'
         good_ans = 'if is_symbol(self.t, "А") :\n'

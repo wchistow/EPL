@@ -121,6 +121,7 @@ class Compiler:
             'loop': self.handle_loop_num,
             'while': self.handle_if_while_check,
             'if': self.handle_if_while_check,
+            'elif': self.handle_if_while_check,
             'write': self.handle_write_word,
             'else': self.handle_else,
         }
@@ -212,7 +213,7 @@ class Compiler:
         if token in checks:
             self.stack[-1].code += f'{checks[token]} '
         elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or \
-                (self.stack[-1].name == 'if' and token == 'ТО'):
+                (self.stack[-1].name in ('if', 'elif') and token == 'ТО'):
             try:
                 compile(self.stack[-1].code, 'f', 'eval')
             except SyntaxError:
@@ -221,9 +222,12 @@ class Compiler:
             self.stack[-1].code += ':'
             if self.stack[-1].name == 'if':
                 self.pycode.append(f'{self.indent}if ' + self.stack[-1].code)
-            else:
+                self.indent += '    '
+            elif self.stack[-1].name == 'while':
                 self.pycode.append(f'{self.indent}while ' + self.stack[-1].code)
-            self.indent += '    '
+                self.indent += '    '
+            else:
+                self.pycode.append(f'{self.indent[:-4]}elif ' + self.stack[-1].code)
         elif token.isdigit() or token.isalpha():
             if token in keywords:
                 raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
@@ -231,18 +235,20 @@ class Compiler:
 
     def handle_else(self, token):
         if token in built_in_funcs or \
-                token in ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'ПОКА', 'ПИШИ'] or \
+                token in ['ЭТО', 'ПОВТОРИ', 'ПОКА', 'ПИШИ'] or \
                 token in self.user_funcs:
             self.stack[-1].status = 1
             self.pycode.append(f'{self.indent[:-4]}else:')
-            # Handle current token
+            # Обработка token
             if token in built_in_funcs:
                 for line in built_in_funcs[token]:
                     self.pycode.append(self.indent + line)
-            elif token in ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'ПОКА', 'ПИШИ']:
+            elif token in ['ЭТО', 'ПОВТОРИ', 'ПОКА', 'ПИШИ']:
                 self.handlers[self.stack[-1].name](token)
             else:
                 self.pycode.append(self.indent + self.user_funcs[token])
+        elif token == 'ЕСЛИ':
+            self.stack[-1].name = 'elif'
 
     def handle_write_word(self, token):
         if token in keywords:
