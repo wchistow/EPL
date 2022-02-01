@@ -91,6 +91,18 @@ class TestCompiler(unittest.TestCase):
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
+    def test_empty(self):
+        code = 'если свободно то вниз конец'
+        good_ans = 'if empty(self.t) :\n'
+        good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
+        self.assertEqual(self.comp.translate(code), good_ans)
+
+    def test_not_empty(self):
+        code = 'если не свободно то вниз конец'
+        good_ans = 'if not empty(self.t) :\n'
+        good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
+        self.assertEqual(self.comp.translate(code), good_ans)
+
     def test_if_else(self):
         code = 'если край то вверх иначе вниз конец'
         good_ans = 'if check_edge(self.t) :\n'
@@ -116,12 +128,6 @@ class TestCompiler(unittest.TestCase):
     def test_or(self):
         code = 'если край или пусто то вниз конец'
         good_ans = 'if check_edge(self.t) or not_symbol(self.t) :\n'
-        good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
-        self.assertEqual(self.comp.translate(code), good_ans)
-
-    def test_not_symbol(self):
-        code = 'если свободно то вниз конец'
-        good_ans = 'if empty(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
