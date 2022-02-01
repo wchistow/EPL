@@ -79,13 +79,13 @@ class TestCompiler(unittest.TestCase):
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
-    def test_empty(self):
+    def test_not_symbol(self):
         code = 'если пусто то вниз конец'
         good_ans = 'if not_symbol(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
-    def test_not_empty(self):
+    def test_not_not_symbol(self):
         code = 'если не пусто то вниз конец'
         good_ans = 'if not not_symbol(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
