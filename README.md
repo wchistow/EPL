@@ -17,8 +17,8 @@ This programming language only for people, who can speak Russian
 ```
 python3 --version
 ```
-Если на экран вывелся номер версии, например 3.10.0, то Python
-в вашей системе уже установлен.
+Если на экран вывелась информация о версии, например "Python 3.10.0",
+то Python в вашей системе уже установлен.
 Если же нет, то вы можете установить Python с
 [официального сайта](https://www.python.org/)
 
@@ -41,7 +41,7 @@ git clone https://github.com/wchistow/EPL.git
 ## Запуск
 Запустить EPL во всех операционных системах можно так:
 ```
-python3 <Путь к катологу, в который вы скачали EPL>/main.py
+python3 <Путь к катологу, в который вы скачали EPL>/EPL/main.py
 ```
 ## Справка
 документацию к EPL-у можно найти [здесь](https://github.com/wchistow/EPL/blob/master/документация.md)
