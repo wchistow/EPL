@@ -21,7 +21,7 @@ def start_state(x):
         return TokenType.NUMBER
     elif x == "'":
         return TokenType.STRING
-    elif x in '+-*/%':
+    elif x in '+-*/%:':
         return TokenType.OPERATOR
     else:
         raise EPLSyntaxError(f'Синтаксическая ошибка: неверный символ "{x}"')
@@ -84,7 +84,7 @@ checks = {
     'ИЛИ': 'or',
 }
 
-keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ТО', 'ДЕЛАЙ', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
+keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
 
 
 @dataclass
@@ -212,8 +212,7 @@ class Compiler:
     def handle_if_while_check(self, token):
         if token in checks:
             self.stack[-1].code += f'{checks[token]} '
-        elif (self.stack[-1].name == 'while' and token == 'ДЕЛАЙ') or \
-                (self.stack[-1].name in ('if', 'elif') and token == 'ТО'):
+        elif token == ':':
             try:
                 compile(self.stack[-1].code, 'f', 'eval')
             except SyntaxError:
@@ -234,19 +233,9 @@ class Compiler:
             self.stack[-1].code += f'is_symbol(self.t, "{token}") '
 
     def handle_else(self, token):
-        if token in built_in_funcs or \
-                token in ['ЭТО', 'ПОВТОРИ', 'ПОКА', 'ПИШИ'] or \
-                token in self.user_funcs:
+        if token == ':':
             self.stack[-1].status = 1
             self.pycode.append(f'{self.indent[:-4]}else:')
-            # Обработка token
-            if token in built_in_funcs:
-                for line in built_in_funcs[token]:
-                    self.pycode.append(self.indent + line)
-            elif token in ['ЭТО', 'ПОВТОРИ', 'ПОКА', 'ПИШИ']:
-                self.handlers[self.stack[-1].name](token)
-            else:
-                self.pycode.append(self.indent + self.user_funcs[token])
         elif token == 'ЕСЛИ':
             self.stack[-1].name = 'elif'
 

@@ -56,55 +56,55 @@ class TestCompiler(unittest.TestCase):
 
     # Тесты проверок ----------
     def test_check_edge(self):
-        code = 'если край то вниз конец'
+        code = 'если край: вниз конец'
         good_ans = 'if check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_not_check_edge(self):
-        code = 'если не край то вниз конец'
+        code = 'если не край: вниз конец'
         good_ans = 'if not check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_is_symbol(self):
-        code = 'если символ то вниз конец'
+        code = 'если символ: вниз конец'
         good_ans = 'if is_symbol(self.t, "any") :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_not_is_symbol(self):
-        code = 'если не символ то вниз конец'
+        code = 'если не символ: вниз конец'
         good_ans = 'if not is_symbol(self.t, "any") :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_not_symbol(self):
-        code = 'если пусто то вниз конец'
+        code = 'если пусто: вниз конец'
         good_ans = 'if not_symbol(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_not_not_symbol(self):
-        code = 'если не пусто то вниз конец'
+        code = 'если не пусто: вниз конец'
         good_ans = 'if not not_symbol(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_empty(self):
-        code = 'если свободно то вниз конец'
+        code = 'если свободно: вниз конец'
         good_ans = 'if empty(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_not_empty(self):
-        code = 'если не свободно то вниз конец'
+        code = 'если не свободно: вниз конец'
         good_ans = 'if not empty(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_if_else(self):
-        code = 'если край то вверх иначе вниз конец'
+        code = 'если край: вверх иначе: вниз конец'
         good_ans = 'if check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(90)\n    self.t.forward(50)\n    check_hit_edge(self.t)\n'
         good_ans += 'else:\n'
@@ -112,7 +112,7 @@ class TestCompiler(unittest.TestCase):
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_if_elif(self):
-        code = 'если край то вниз иначе если свободно то вниз конец'
+        code = 'если край: вниз иначе если свободно: вниз конец'
         good_ans = 'if check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)\n'
         good_ans += 'elif empty(self.t) :\n'
@@ -120,26 +120,26 @@ class TestCompiler(unittest.TestCase):
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_is_letter(self):
-        code = 'если а то вверх конец'
+        code = 'если а: вверх конец'
         good_ans = 'if is_symbol(self.t, "А") :\n'
         good_ans += '    self.t.setheading(90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_or(self):
-        code = 'если край или пусто то вниз конец'
+        code = 'если край или пусто: вниз конец'
         good_ans = 'if check_edge(self.t) or not_symbol(self.t) :\n'
         good_ans += '    self.t.setheading(-90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_while(self):
         """Тестирует цикл пока."""
-        code = 'пока не край делай вверх конец'
+        code = 'пока не край: вверх конец'
         good_ans = 'while not check_edge(self.t) :\n'
         good_ans += '    self.t.setheading(90)\n    self.t.forward(50)\n    check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_nested(self):
-        code = 'это имя если край то вниз конец конец'
+        code = 'это имя если край: вниз конец конец'
         good_ans = 'def ИМЯ(self):\n    if check_edge(self.t) :\n'
         good_ans += '        self.t.setheading(-90)\n        self.t.forward(50)\n        check_hit_edge(self.t)'
         self.assertEqual(self.comp.translate(code), good_ans)
@@ -193,7 +193,7 @@ class TestCompiler(unittest.TestCase):
             self.comp.translate(code)
 
     def test_invalid_check(self):
-        code = 'если не то вниз конец'
+        code = 'если не: вниз конец'
         with self.assertRaisesRegex(EPLSyntaxError, 'Неверная проверка.'):
             self.comp.translate(code)
 
