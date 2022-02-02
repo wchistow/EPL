@@ -138,8 +138,9 @@ class Compiler:
             'func': 'функция',
             'loop': 'цикл',
             'if': 'проверка',
+            'elif': 'проверка',
             'while': 'цикл',
-            'else': 'иначе',
+            'else': 'проверка',
         }
 
     def translate(self, code: str):
