@@ -75,13 +75,13 @@ built_in_funcs = {
 }
 
 checks = {
-    'КРАЙ': 'check_edge(self.t)',
-    'СИМВОЛ': 'is_symbol(self.t, "any")',
-    'ПУСТО': 'not_symbol(self.t)',
-    'СВОБОДНО': 'empty(self.t)',
-    'НЕ': 'not',
-    'И': 'and',
-    'ИЛИ': 'or',
+    'КРАЙ': 'check_edge(self.t) ',
+    'СИМВОЛ': 'is_symbol(self.t, "any") ',
+    'ПУСТО': 'not_symbol(self.t) ',
+    'СВОБОДНО': 'empty(self.t) ',
+    'НЕ': 'not ',
+    'И': 'and ',
+    'ИЛИ': 'or ',
 }
 
 keywords = ['ЭТО', 'ПОВТОРИ', 'ЕСЛИ', 'НЕ', 'И', 'ИЛИ', 'ИНАЧЕ', 'ПОКА', 'ПИШИ', 'КОНЕЦ']
@@ -159,7 +159,7 @@ class Compiler:
                     elif t in self.keywords_cells:
                         cell = self.keywords_cells[t]
                         if t in ('ЕСЛИ', 'ПОКА', 'ИНАЧЕ'):
-                            self.stack.append(StackCell(cell[0], 0, cell[1]))
+                            self.stack.append(StackCell(cell[0], 0, cell[1]))  # смотри метод handle_if_while_check
                         else:
                             self.stack.append(StackCell(cell[0], 0, self.indent + cell[1]))
 
@@ -197,7 +197,7 @@ class Compiler:
         elif not token.isidentifier():
             raise EPLNameError(f'Не верное имя функции "{token}".')
         self.stack[-1].status = 1
-        self.stack[-1].code += f'{token}(self):'
+        self.stack[-1].code += token + '(self):'
         self.pycode.append(self.stack[-1].code)
         self.user_funcs[token] = token + '(self)'
         self.indent += '    '
@@ -206,13 +206,13 @@ class Compiler:
         if not token.isdigit():
             raise EPLValueError('Цикл должен принимать целое не отрицательное число')
         self.stack[-1].status = 1
-        self.stack[-1].code += str(int(float(token))) + '):'
+        self.stack[-1].code += str(int(token)) + '):'
         self.pycode.append(self.stack[-1].code)
         self.indent += '    '
 
     def handle_if_while_check(self, token):
         if token in checks:
-            self.stack[-1].code += f'{checks[token]} '
+            self.stack[-1].code += checks[token]
         elif token == ':':
             try:
                 compile(self.stack[-1].code, 'f', 'eval')
@@ -220,14 +220,11 @@ class Compiler:
                 raise EPLSyntaxError('Неверная проверка.')
             self.stack[-1].status = 1
             self.stack[-1].code += ':'
-            if self.stack[-1].name == 'if':
-                self.pycode.append(f'{self.indent}if ' + self.stack[-1].code)
-                self.indent += '    '
-            elif self.stack[-1].name == 'while':
-                self.pycode.append(f'{self.indent}while ' + self.stack[-1].code)
-                self.indent += '    '
-            else:
+            if self.stack[-1].name == 'elif':
                 self.pycode.append(f'{self.indent[:-4]}elif ' + self.stack[-1].code)
+            else:
+                self.pycode.append(f'{self.indent}{self.stack[-1].name} ' + self.stack[-1].code)
+                self.indent += '    '
         elif token.isdigit() or token.isalpha():
             if token in keywords:
                 raise EPLSyntaxError(f'Неверное использование ключевого слова {token}.')
