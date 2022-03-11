@@ -15,7 +15,6 @@ class TestCompiler(unittest.TestCase):
         good_ans += 'self.t.setheading(-90)\nself.t.forward(50)\ncheck_hit_edge(self.t)\n'  # вниз
         good_ans += 'self.t.setheading(0)\nself.t.forward(50)\ncheck_hit_edge(self.t)\n'  # вправо
         good_ans += 'self.t.setheading(180)\nself.t.forward(50)\ncheck_hit_edge(self.t)'  # влево
-        # trans_code = self.comp.translate(code)
         self.assertEqual(self.comp.translate(code), good_ans)
 
     def test_up_down_pen(self):
