@@ -43,4 +43,4 @@ python3 <Путь к катологу, в который вы скачали EPL
 python3 <Путь к катологу, в который вы скачали EPL>\EPL\main.py
 ```
 ## Справка
-документацию к EPL-у можно найти [здесь](https://github.com/wchistow/EPL/blob/master/документация.md)
+документацию к EPL-у можно найти [здесь](https://gitflic.ru/project/wchistow/elementary/blob?file=документация.md)
